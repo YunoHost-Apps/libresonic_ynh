@@ -44,11 +44,11 @@ sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
 
 
-sudo sh -c "echo 'LdapAutoShadowing=true' > /var/subsonic/subsonic.properties"
-sudo sh -c "LdapManagerDn=cn\=admin,dc\=yunohost,dc\=org' > /var/subsonic/subsonic.properties"
-sudo sh -c "LdapEnabled=true' > /var/subsonic/subsonic.properties"
-sudo sh -c "ldap\://127.0.0.1\:389/,ou\=users,dc\=yunohost,dc\=org' > /var/subsonic/subsonic.properties"
-sudo sh -c "LdapSearchFilter=(&(uid\={0})(memberof\=cn\=users,ou\=users,dc\=yunohost,dc\=org))' > /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapManagerDn=cn\=admin,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapEnabled=true' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapUrl=ldap\://127.0.0.1\:389/,ou\=users,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapSearchFilter=(&(uid\={0})(memberof\=cn\=users,ou\=users,dc\=yunohost,dc\=org))' >> /var/subsonic/subsonic.properties"
 
 
 # Monitor service
