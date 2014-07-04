@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Retrieve arguments
+domain=$1
+path=$2
+user=$3
+
+# Check user parameter
+sudo yunohost user list --json | grep -q "\"username\": \"$user\""
+if [[ ! $? -eq 0 ]]; then
+    echo "Wrong user"
+    exit 1
+fi
+sudo yunohost app setting subsonic admin_user -v $user
+
+# Check domain/path availability
+sudo yunohost app checkurl $domain$path -a subsonic
+if [[ ! $? -eq 0 ]]; then
+    exit 1
+fi
+
+# Install dependencies
+sudo apt-get install -y openjdk-6-jre
+
+# Generate random password
+db_pwd=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d 'A-Za-z0-9' | sed -n 's/\(.\{24\}\).*/\1/p')
+
+# Use 'subsonic' as database name and user
+db_user=subsonic
+
+# Initialize database and store mysql password for upgrade
+sudo yunohost app initdb $db_user -p $db_pwd
+sudo yunohost app setting subsonic mysqlpwd -v $db_pwd
+
+
+# Copy files to the right place
+
+sudo dpkg -i ../sources/subsonic-4.9.deb
+
+
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
+
+
+# Monitor service
+sudo yunohost service add subsonic
+
+
+
+# Reload Nginx and regenerate SSOwat conf
+
+sudo service nginx reload
+sudo yunohost app setting owncloud skipped_uris -v "/"
+sudo yunohost app ssowatconf
+sudo service subsonic restart
+
+
+# Configure LDAP plugin
+mysql -u $db_user -p$db_pwd $db_user < ../conf/ldap_config.sql
+
+
+# Make an LDAP user as admin
+mysql -u $db_user -p$db_pwd $db_user -e "INSERT INTO oc_group_user VALUES ('admin','$user');"
+
+
+sudo yunohost app ssowatconf
+
+# Remove temporary entry in /etc/hosts
+sudo sed -i '/yunoowncloud/d' /etc/hosts

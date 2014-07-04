@@ -1,0 +1,40 @@
+{
+    "name": "SubSonic",
+    "id": "subsonic",
+    "description": {
+        "en": "Sync & share your files, pictures, music, contacts, calendars, and much more !",
+        "fr": "Synchronisez et partagez vos fichiers, images, musiques, contacts, calendriers, et bien plus !"
+    },
+    "developer": {
+        "name": "kload",
+        "email": "kload@kload.fr",
+        "url": ""
+    },
+    "multi_instance": "true",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for subsonic"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "ask": {
+                    "en": "Choose a path for subsonic"
+                },
+                "example": "/subsonic",
+                "default": "/subsonic"
+            },
+            {
+                "name": "admin",
+                "ask": {
+                    "en": "Choose the subsonic administrator (must be an existing YunoHost user)"
+                },
+                "example": "homer"
+            }
+        ]
+    }
+}
