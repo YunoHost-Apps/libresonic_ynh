@@ -19,6 +19,9 @@ if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
 
+# Remove trailing "/" for next commands
+path=${path%/}
+
 # Install dependencies
 sudo apt-get install -y openjdk-6-jre
 
@@ -37,8 +40,15 @@ sudo yunohost app setting subsonic mysqlpwd -v $db_pwd
 
 sudo dpkg -i ../sources/subsonic-4.9.deb
 
-
+sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
+
+
+sudo sh -c "echo 'LdapAutoShadowing=true' > /var/subsonic/subsonic.properties"
+sudo sh -c "LdapManagerDn=cn\=admin,dc\=yunohost,dc\=org' > /var/subsonic/subsonic.properties"
+sudo sh -c "LdapEnabled=true' > /var/subsonic/subsonic.properties"
+sudo sh -c "ldap\://127.0.0.1\:389/,ou\=users,dc\=yunohost,dc\=org' > /var/subsonic/subsonic.properties"
+sudo sh -c "LdapSearchFilter=(&(uid\={0})(memberof\=cn\=users,ou\=users,dc\=yunohost,dc\=org))' > /var/subsonic/subsonic.properties"
 
 
 # Monitor service
@@ -49,17 +59,12 @@ sudo yunohost service add subsonic
 # Reload Nginx and regenerate SSOwat conf
 
 sudo service nginx reload
-sudo yunohost app setting owncloud skipped_uris -v "/"
+sudo yunohost app setting subsonic skipped_uris -v "/"
 sudo yunohost app ssowatconf
 sudo service subsonic restart
 
 
-# Configure LDAP plugin
-mysql -u $db_user -p$db_pwd $db_user < ../conf/ldap_config.sql
 
-
-# Make an LDAP user as admin
-mysql -u $db_user -p$db_pwd $db_user -e "INSERT INTO oc_group_user VALUES ('admin','$user');"
 
 
 sudo yunohost app ssowatconf
