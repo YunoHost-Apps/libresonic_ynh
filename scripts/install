@@ -23,51 +23,35 @@ fi
 path=${path%/}
 
 # Install dependencies
-sudo apt-get install -y openjdk-6-jre
+sudo apt-get install -y openjdk-7-jre tomcat7
 
-# Generate random password
-db_pwd=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d 'A-Za-z0-9' | sed -n 's/\(.\{24\}\).*/\1/p')
-
-# Use 'subsonic' as database name and user
-db_user=subsonic
-
-# Initialize database and store mysql password for upgrade
-sudo yunohost app initdb $db_user -p $db_pwd
-sudo yunohost app setting subsonic mysqlpwd -v $db_pwd
 
 
 # Copy files to the right place
-
-sudo dpkg -i ../sources/subsonic-4.9.deb
+sudo service tomcat7 stop
+sudo cp ../sources/subsonic.war /var/lib/tomcat7/webapps/
+sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
 
 
-sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/subsonic/subsonic.properties"
-sudo sh -c "echo 'LdapManagerDn=cn\=admin,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
-sudo sh -c "echo 'LdapEnabled=true' >> /var/subsonic/subsonic.properties"
-sudo sh -c "echo 'LdapUrl=ldap\://127.0.0.1\:389/,ou\=users,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
-sudo sh -c "echo 'LdapSearchFilter=(&(uid\={0})(memberof\=cn\=users,ou\=users,dc\=yunohost,dc\=org))' >> /var/subsonic/subsonic.properties"
+#sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/subsonic/subsonic.properties"
+#sudo sh -c "echo 'LdapManagerDn=cn\=admin,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
+#sudo sh -c "echo 'LdapEnabled=true' >> /var/subsonic/subsonic.properties"
+#sudo sh -c "echo 'LdapUrl=ldap\://127.0.0.1\:389/,ou\=users,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
+#sudo sh -c "echo 'LdapSearchFilter=(&(uid\={0})(memberof\=cn\=users,ou\=users,dc\=yunohost,dc\=org))' >> /var/subsonic/subsonic.properties"
 
 
 # Monitor service
-sudo yunohost service add subsonic
+sudo service tomcat7 start
+sudo yunohost service add tomcat7
 
 
 
 # Reload Nginx and regenerate SSOwat conf
 
 sudo service nginx reload
-sudo yunohost app setting subsonic skipped_uris -v "/"
-sudo yunohost app ssowatconf
-sudo service subsonic restart
-
-
-
-
-
+sudo yunohost app setting owncloud skipped_uris -v "/"
 sudo yunohost app ssowatconf
 
-# Remove temporary entry in /etc/hosts
-sudo sed -i '/yunoowncloud/d' /etc/hosts
