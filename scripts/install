@@ -31,6 +31,8 @@ sudo apt-get install -y openjdk-7-jre tomcat7
 sudo service tomcat7 stop
 sudo cp ../sources/subsonic.war /var/lib/tomcat7/webapps/
 sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/
+sudo mkdir /var/subsonic
+sudo chown -R tomcat7:tomcat7 /var/subsonic/
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf

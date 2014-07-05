@@ -1,5 +1,5 @@
 {
-    "name": "subsonic",
+    "name": "Subsonic",
     "id": "subsonic",
     "description": {
         "en": "Sync & share your files, pictures, music, contacts, calendars, and much more !",
@@ -27,14 +27,8 @@
                 },
                 "example": "/subsonic",
                 "default": "/subsonic"
-            },
-            {
-                "name": "admin",
-                "ask": {
-                    "en": "Choose the subsonic administrator (must be an existing YunoHost user)"
-                },
-                "example": "homer"
             }
+            
         ]
     }
 }
