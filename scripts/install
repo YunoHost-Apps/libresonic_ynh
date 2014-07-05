@@ -3,15 +3,6 @@
 # Retrieve arguments
 domain=$1
 path=$2
-user=$3
-
-# Check user parameter
-sudo yunohost user list --json | grep -q "\"username\": \"$user\""
-if [[ ! $? -eq 0 ]]; then
-    echo "Wrong user"
-    exit 1
-fi
-sudo yunohost app setting subsonic admin_user -v $user
 
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a subsonic
