@@ -16,14 +16,11 @@ path=${path%/}
 # Install dependencies
 sudo apt-get install -y openjdk-7-jre tomcat7 lame flac faad vorbis-tools ffmpeg
 
-
+sudo dpkg -i ../sources/subsonic-5.0.beta1.deb
 
 # Copy files to the right place
-sudo service tomcat7 stop
-sudo cp ../sources/subsonic.war /var/lib/tomcat7/webapps/
-sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/
 sudo mkdir /var/subsonic
-sudo chown -R tomcat7:tomcat7 /var/subsonic/
+
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
@@ -36,14 +33,10 @@ sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
 #sudo sh -c "echo 'LdapSearchFilter=(&(uid\={0})(memberof\=cn\=users,ou\=users,dc\=yunohost,dc\=org))' >> /var/subsonic/subsonic.properties"
 
 
-# Monitor service
-sudo service tomcat7 start
-sudo yunohost service add tomcat7
 
 
 
 # Reload Nginx and regenerate SSOwat conf
-
 sudo service nginx reload
 sudo yunohost app setting owncloud skipped_uris -v "/"
 sudo yunohost app ssowatconf
