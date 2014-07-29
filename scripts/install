@@ -45,5 +45,5 @@ sudo yunohost service add tomcat7
 # Reload Nginx and regenerate SSOwat conf
 
 sudo service nginx reload
-sudo yunohost app setting owncloud skipped_uris -v "/"
+sudo yunohost app setting owncloud
 sudo yunohost app ssowatconf
