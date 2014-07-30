@@ -64,7 +64,7 @@ sudo chmod 775 $data_path
 sudo service tomcat7 start
 sudo yunohost service add tomcat7
 
-wget "http://localhost:8080/subsonic/rest/createUser.view?u=admin&p=admin&adminRole=Yes&username=$user&password=a&email=a@a.a&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/createUser.view?u=admin&p=admin&adminRole=Yes&username=$user&password=a&email=a@a.a&ldapAuthenticated=Yes&v=1.10.2&c=myapp" > /dev/null 2>&1
 
 wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
 wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&settingsRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
