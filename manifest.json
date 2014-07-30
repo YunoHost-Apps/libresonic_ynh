@@ -2,10 +2,8 @@
     "name": "Subsonic",
     "id": "subsonic",
     "description": {
-        "en": "Welcome to Subsonic! Enjoy your music and movies no matter where you are. Share with family and friends.
-    Browse and manage your media collection with the user-friendly web interface.",
-        "fr": "Bienvenue à Subsonic! Profitez de votre musique et de films, peu importe où vous êtes. Partager avec famille et amis.
-     Parcourir et gérer votre collection de médias avec l'interface web conviviale."
+        "en": "Welcome to Subsonic! Enjoy your music and movies no matter where you are. Share with family and friends. Browse and manage your media collection with the user-friendly web interface.",
+        "fr": "Bienvenue à Subsonic! Profitez de votre musique et de films, peu importe où vous êtes. Partager avec famille et amis. Parcourir et gérer votre collection de médias avec l'interface web conviviale."
     },
     "developer": {
         "name": "drfred1981",
