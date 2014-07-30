@@ -55,6 +55,11 @@ sudo addgroup $user tomcat7
 sudo addgroup tomcat7 $user
 
 
+data_path=/home/yunohost.app/subsonic
+sudo mkdir -p $data_path
+sudo chown -hR tomcat7:$user $data_path
+sudo chmod 755 $data_path
+
 # Monitor service
 sudo service tomcat7 start
 sudo yunohost service add tomcat7
