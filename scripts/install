@@ -65,11 +65,11 @@ sudo service tomcat7 start
 sudo yunohost service add tomcat7
 
 
-wget "http://localhost/subsonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
 
 
 # Reload Nginx and regenerate SSOwat conf
 
 sudo service nginx reload
-sudo yunohost app setting subsonic
+sudo yunohost app setting subsonic skipped_uris -v "/rest"
 sudo yunohost app ssowatconf
