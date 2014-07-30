@@ -5,9 +5,10 @@ sudo yunohost service remove subsonic
 domain=$(sudo yunohost app setting subsonic domain)
 
 sudo rm /etc/nginx/conf.d/$domain.d/subsonic.conf
-sudo rm -rf /home/yunohost.subsonic
 
-sudo apt-get remove -y -qq subsonic
+sudo service tomcat7 stop
+sudo rm /var/lib/tomcat7/webapps/subsonic.war
+sudo service tomcat7 start
 
 sudo service nginx reload
 sudo yunohost app ssowatconf 
