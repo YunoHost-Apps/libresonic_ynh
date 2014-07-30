@@ -8,6 +8,7 @@ sudo rm /etc/nginx/conf.d/$domain.d/subsonic.conf
 
 sudo service tomcat7 stop
 sudo rm /var/lib/tomcat7/webapps/subsonic.war
+sudo rm -r /var/subsonic/
 sudo service tomcat7 start
 
 sudo service nginx reload
