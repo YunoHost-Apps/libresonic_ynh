@@ -18,19 +18,19 @@
             {
                 "name": "domain",
                 "ask": {
-                    "en": "Choose a domain for subsonic"
+                    "en": "Choose a domain for Subsonic"
                 },
                 "example": "domain.org"
             },
             {
                 "name": "path",
                 "ask": {
-                    "en": "Choose a path for subsonic"
+                    "en": "Choose a path for Subsonic"
                 },
                 "example": "/subsonic",
                 "default": "/subsonic"
             },
-              {
+            {
                 "name": "admin",
                 "ask": {
                     "en": "Choose the Subsonic administrator (must be an existing YunoHost user)"
