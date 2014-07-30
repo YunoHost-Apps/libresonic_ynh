@@ -57,8 +57,8 @@ sudo addgroup tomcat7 $user
 
 data_path=/home/yunohost.app/subsonic
 sudo mkdir -p $data_path
-sudo chown -hR tomcat7:$user $data_path
-sudo chmod 755 $data_path
+sudo chown -hR tomcat7:tomcat7 $data_path
+sudo chmod 775 $data_path
 
 # Monitor service
 sudo service tomcat7 start
@@ -66,6 +66,15 @@ sudo yunohost service add tomcat7
 
 
 wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&settingsRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&streamRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&jukebowRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&downloadRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&uploadRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&covertArtRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&commentRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&podcastArtRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&shareArtRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
 
 
 # Reload Nginx and regenerate SSOwat conf
