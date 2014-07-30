@@ -3,12 +3,23 @@
 # Retrieve arguments
 domain=$1
 path=$2
+user=$3
+
+# Check user parameter
+sudo yunohost user list --json | grep -q "\"username\": \"$user\""
+if [[ ! $? -eq 0 ]]; then
+    echo "Wrong user"
+    exit 1
+fi
 
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a subsonic
 if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
+
+
+sudo yunohost app setting subsonic admin_user -v $user
 
 # Remove trailing "/" for next commands
 path=${path%/}
@@ -23,17 +34,25 @@ sudo service tomcat7 stop
 sudo cp ../sources/subsonic.war /var/lib/tomcat7/webapps/
 sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/
 sudo mkdir /var/subsonic
+sudo mkdir /var/subsonic/transcode
+sudo ln -s /usr/bin/lame /var/subsonic/transcode
+sudo ln -s /usr/bin/ffmpeg /var/subsonic/transcode
 sudo chown -R tomcat7:tomcat7 /var/subsonic/
+
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
 
 
-#sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/subsonic/subsonic.properties"
-#sudo sh -c "echo 'LdapManagerDn=cn\=admin,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
-#sudo sh -c "echo 'LdapEnabled=true' >> /var/subsonic/subsonic.properties"
-#sudo sh -c "echo 'LdapUrl=ldap\://127.0.0.1\:389/,ou\=users,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
-#sudo sh -c "echo 'LdapSearchFilter=(&(uid\={0})(memberof\=cn\=users,ou\=users,dc\=yunohost,dc\=org))' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapManagerDn=' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapEnabled=true' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapUrl=ldap\://localhost\:389/ou\=users,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
+sudo sh -c "echo 'LdapSearchFilter=(&(objectClass\=mailAccount)(uid\={0}))' >> /var/subsonic/subsonic.properties"
+
+
+sudo addgroup $user tomcat7
+sudo addgroup tomcat7 $user
 
 
 # Monitor service
@@ -41,9 +60,11 @@ sudo service tomcat7 start
 sudo yunohost service add tomcat7
 
 
+wget "http://localhost/subsonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+
 
 # Reload Nginx and regenerate SSOwat conf
 
 sudo service nginx reload
-sudo yunohost app setting owncloud
+sudo yunohost app setting subsonic
 sudo yunohost app ssowatconf

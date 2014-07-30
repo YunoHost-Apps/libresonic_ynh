@@ -1,4 +1,3 @@
 subsonic_ynh
 ============
-
-subsonic_ynh
+Package Subsonic for Yunohost

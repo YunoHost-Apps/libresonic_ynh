@@ -2,11 +2,13 @@
     "name": "Subsonic",
     "id": "subsonic",
     "description": {
-        "en": "Sync & share your files, pictures, music, contacts, calendars, and much more !",
-        "fr": "Synchronisez et partagez vos fichiers, images, musiques, contacts, calendriers, et bien plus !"
+        "en": "Welcome to Subsonic! Enjoy your music and movies no matter where you are. Share with family and friends.
+    Browse and manage your media collection with the user-friendly web interface.",
+        "fr": "Bienvenue à Subsonic! Profitez de votre musique et de films, peu importe où vous êtes. Partager avec famille et amis.
+     Parcourir et gérer votre collection de médias avec l'interface web conviviale."
     },
     "developer": {
-        "name": "",
+        "name": "drfred1981",
         "email": "",
         "url": "http://subsonic.org"
     },
@@ -27,8 +29,14 @@
                 },
                 "example": "/subsonic",
                 "default": "/subsonic"
+            },
+              {
+                "name": "admin",
+                "ask": {
+                    "en": "Choose the Subsonic administrator (must be an existing YunoHost user)"
+                },
+                "example": "homer"
             }
-            
         ]
     }
 }

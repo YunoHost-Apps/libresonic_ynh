@@ -1,0 +1,7 @@
+
+
+
+sudo service tomcat7 stop
+sudo cp ../sources/subsonic.war /var/lib/tomcat7/webapps/
+sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/
+sudo service tomcat7 start
