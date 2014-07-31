@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo service subsonic stop
+
 sudo yunohost service remove subsonic
 domain=$(sudo yunohost app setting subsonic domain)
 
