@@ -12,6 +12,8 @@ if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
 
+
+
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a subsonic
 if [[ ! $? -eq 0 ]]; then
@@ -20,6 +22,8 @@ fi
 
 
 sudo yunohost app setting subsonic admin_user -v $user
+
+YNH_MAIL=$(sudo yunohost user info $user | grep "mail: " | sed s/'mail: '/''/g)
 
 # Remove trailing "/" for next commands
 path=${path%/}
@@ -64,18 +68,20 @@ sudo chmod 775 $data_path
 sudo service tomcat7 start
 sudo yunohost service add tomcat7
 
-wget "http://localhost:8080/subsonic/rest/createUser.view?u=admin&p=admin&adminRole=Yes&username=$user&password=a&email=a@a.a&ldapAuthenticated=Yes&v=1.10.2&c=myapp" > /dev/null 2>&1
+VERSION="1.10.2"
 
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&settingsRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&streamRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&jukebowRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&downloadRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&uploadRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&covertArtRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&commentRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&podcastArtRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&shareArtRole=Yes&username=$user&v=1.10.2&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/createUser.view?u=admin&p=admin&adminRole=Yes&username=$user&password=a&email=$YNH_MAIL&ldapAuthenticated=Yes&v=$VERSION&c=myapp" > /dev/null 2>&1
+
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&settingsRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&streamRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&jukebowRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&downloadRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&uploadRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&covertArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&commentRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&podcastArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&shareArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
 
 
 # Reload Nginx and regenerate SSOwat conf
