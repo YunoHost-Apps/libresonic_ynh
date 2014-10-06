@@ -41,7 +41,7 @@ sudo mkdir /var/subsonic
 sudo mkdir /var/subsonic/transcode
 sudo ln -s /usr/bin/lame /var/subsonic/transcode
 sudo ln -s /usr/bin/ffmpeg /var/subsonic/transcode
-sudo chown -R tomcat7:tomcat7 /var/subsonic/
+
 
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
@@ -54,7 +54,7 @@ sudo sh -c "echo 'LdapEnabled=true' >> /var/subsonic/subsonic.properties"
 sudo sh -c "echo 'LdapUrl=ldap\://localhost\:389/ou\=users,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
 sudo sh -c "echo 'LdapSearchFilter=(&(objectClass\=mailAccount)(uid\={0}))' >> /var/subsonic/subsonic.properties"
 
-
+sudo chown -R tomcat7:tomcat7 /var/subsonic/
 sudo addgroup $user tomcat7
 sudo addgroup tomcat7 $user
 
