@@ -28,7 +28,7 @@ path=${path%/}
 
 # Install dependencies
 echo "Install dependencies ..."
-sudo apt-get install -y openjdk-7-jre tomcat7 lame flac faad vorbis-tools ffmpeg
+sudo apt-get install -y openjdk-7-jre tomcat7 lame flac faad vorbis-tools ffmpeg xsltproc
 
 
 
@@ -43,6 +43,11 @@ mkdir -p ../subsonic
 sudo unzip ../subsonic.zip -d ../subsonic  > /dev/null 2>&1
 
 sudo cp ../subsonic/*.war /var/lib/tomcat7/webapps/subsonic.war
+
+# Configure tomcat server
+xsltproc  -o /etc/tomcat7/server.xml.new ../conf/addProxyPortToServerXml.xsl /etc/tomcat7/server.xml
+mv /etc/tomcat7/server.xml /etc/tomcat7/server.xml.bak
+mv /etc/tomcat7/server.xml.new /etc/tomcat7/server.xml
 
 sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/
 sudo mkdir /var/subsonic
