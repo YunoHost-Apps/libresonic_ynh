@@ -5,7 +5,7 @@ sudo service tomcat7 stop
 
 appversion=$(cat upstream_version)
 echo "Downloading subsonic $appversion..."
-sudo wget -O ../subsonic.zip http://downloads.sourceforge.net/project/subsonic/subsonic/$appversion/subsonic-${appversion}-war.zip/download > /dev/null 2>&1
+sudo wget -O ../subsonic.zip http://downloads.sourceforge.net/project/subsonic/subsonic/$appversion/subsonic-${appversion}-war.zip > /dev/null 2>&1
 echo "Extracting to $final_path..."
 mkdir -p ../subsonic
 sudo unzip ../subsonic.zip -d ../subsonic  > /dev/null 2>&1
