@@ -12,8 +12,6 @@ if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
 
-
-
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a subsonic
 if [[ ! $? -eq 0 ]]; then
@@ -29,13 +27,28 @@ YNH_MAIL=$(sudo yunohost user info $user | grep "mail: " | sed s/'mail: '/''/g)
 path=${path%/}
 
 # Install dependencies
-sudo apt-get install -y openjdk-7-jre tomcat7 lame flac faad vorbis-tools ffmpeg
+echo "Install dependencies ..."
+sudo apt-get install -y openjdk-7-jre tomcat7 lame flac faad vorbis-tools ffmpeg xsltproc
 
 
 
 # Copy files to the right place
 sudo service tomcat7 stop
-sudo cp ../sources/subsonic.war /var/lib/tomcat7/webapps/
+
+appversion=$(cat upstream_version)
+echo "Downloading subsonic $appversion..."
+sudo wget -O ../subsonic.zip http://downloads.sourceforge.net/project/subsonic/subsonic/$appversion/subsonic-${appversion}-war.zip > /dev/null 2>&1
+echo "Extracting to $final_path..."
+mkdir -p ../subsonic
+sudo unzip ../subsonic.zip -d ../subsonic  > /dev/null 2>&1
+
+sudo cp ../subsonic/*.war /var/lib/tomcat7/webapps/subsonic.war
+
+# Configure tomcat server
+sudo xsltproc  -o /etc/tomcat7/server.xml.new ../conf/addProxyPortToServerXml.xsl /etc/tomcat7/server.xml
+sudo mv /etc/tomcat7/server.xml /etc/tomcat7/server.xml.bak
+sudo mv /etc/tomcat7/server.xml.new /etc/tomcat7/server.xml
+
 sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/
 sudo mkdir /var/subsonic
 sudo mkdir /var/subsonic/transcode
