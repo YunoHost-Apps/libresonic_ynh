@@ -28,28 +28,22 @@ path=${path%/}
 
 # Install dependencies
 echo "Install dependencies ..."
-sudo apt-get install -y openjdk-7-jre tomcat7 lame flac faad vorbis-tools ffmpeg xsltproc
+sudo apt-get install -y openjdk-8-jre tomcat7 lame flac faad vorbis-tools ffmpeg xsltproc
 
 
 
 # Copy files to the right place
-sudo service tomcat7 stop
+
 
 appversion=$(cat upstream_version)
 echo "Downloading subsonic $appversion..."
-sudo wget -O ../subsonic.zip http://downloads.sourceforge.net/project/subsonic/subsonic/$appversion/subsonic-${appversion}-war.zip > /dev/null 2>&1
-echo "Extracting to $final_path..."
 mkdir -p ../subsonic
-sudo unzip ../subsonic.zip -d ../subsonic  > /dev/null 2>&1
-
-sudo cp ../subsonic/*.war /var/lib/tomcat7/webapps/subsonic.war
+sudo wget -O ../subsonic/subsonic.deb http://www.subsonic.org/pages/download2.jsp?target=subsonic-6.0.beta2.deb > /dev/null 2>&1
+echo "Extracting to $final_path..."
+dpkg -i ../subsonic/*.deb
 
 # Configure tomcat server
-sudo xsltproc  -o /etc/tomcat7/server.xml.new ../conf/addProxyPortToServerXml.xsl /etc/tomcat7/server.xml
-sudo mv /etc/tomcat7/server.xml /etc/tomcat7/server.xml.bak
-sudo mv /etc/tomcat7/server.xml.new /etc/tomcat7/server.xml
 
-sudo chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/
 sudo mkdir /var/subsonic
 sudo mkdir /var/subsonic/transcode
 sudo ln -s /usr/bin/lame /var/subsonic/transcode
@@ -67,9 +61,7 @@ sudo sh -c "echo 'LdapEnabled=true' >> /var/subsonic/subsonic.properties"
 sudo sh -c "echo 'LdapUrl=ldap\://localhost\:389/ou\=users,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
 sudo sh -c "echo 'LdapSearchFilter=(&(objectClass\=mailAccount)(uid\={0}))' >> /var/subsonic/subsonic.properties"
 
-sudo chown -R tomcat7:tomcat7 /var/subsonic/
-sudo addgroup $user tomcat7
-sudo addgroup tomcat7 $user
+
 
 
 data_path=/home/yunohost.app/subsonic
