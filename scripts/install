@@ -38,7 +38,8 @@ sudo apt-get install -y openjdk-8-jre tomcat7 lame flac faad vorbis-tools ffmpeg
 appversion=$(cat upstream_version)
 echo "Downloading subsonic $appversion..."
 mkdir -p ../subsonic
-sudo wget -O ../subsonic/subsonic.deb http://www.subsonic.org/pages/download2.jsp?target=subsonic-6.0.beta2.deb > /dev/null 2>&1
+sudo wget http://www.subsonic.org/pages/download2.jsp?target=subsonic-6.0.beta2.deb > /dev/null 2>&1
+cp *.deb ../subsonic/
 echo "Extracting to $final_path..."
 dpkg -i ../subsonic/*.deb
 
