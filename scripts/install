@@ -41,7 +41,7 @@ mkdir -p ../subsonic
 sudo wget http://subsonic.org/download/subsonic-6.0.beta2.deb > /dev/null 2>&1
 cp *.deb ../subsonic/
 echo "Extracting to $final_path..."
-dpkg -i ../subsonic/*.deb
+sudo dpkg -i ../subsonic/*.deb
 
 # Configure tomcat server
 
