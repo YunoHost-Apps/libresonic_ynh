@@ -54,7 +54,7 @@ sudo ln -s /usr/bin/ffmpeg /var/subsonic/transcode
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
-
+sudo echo 'SUBSONIC_ARGS="--context-path=/'$path' --max-memory=190"'>/etc/default/subsonic
 
 sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/subsonic/subsonic.properties"
 sudo sh -c "echo 'LdapManagerDn=' >> /var/subsonic/subsonic.properties"
@@ -66,13 +66,7 @@ sudo sh -c "echo 'LdapSearchFilter=(&(objectClass\=mailAccount)(uid\={0}))' >> /
 
 
 data_path=/home/yunohost.app/subsonic
-sudo mkdir -p $data_path
-sudo chown -hR tomcat7:tomcat7 $data_path
-sudo chmod 775 $data_path
 
-# Monitor service
-sudo service tomcat7 start
-sudo yunohost service add tomcat7
 
 VERSION="1.10.2"
 
