@@ -13,13 +13,13 @@ if [[ ! $? -eq 0 ]]; then
 fi
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a subsonic
+sudo yunohost app checkurl $domain$path -a libresonic
 if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
 
 
-sudo yunohost app setting subsonic admin_user -v $user
+sudo yunohost app setting libresonic admin_user -v $user
 
 YNH_MAIL=$(sudo yunohost user info $user | grep "mail: " | sed s/'mail: '/''/g)
 
@@ -28,64 +28,60 @@ path=${path%/}
 
 # Install dependencies
 echo "Install dependencies ..."
-sudo apt-get install -y openjdk-8-jre tomcat7 lame flac faad vorbis-tools ffmpeg xsltproc
-
-
+sudo apt-get install -y openjdk-8-jre tomcat8 lame flac faad vorbis-tools ffmpeg xsltproc
 
 # Copy files to the right place
 
 
 appversion=$(cat upstream_version)
-echo "Downloading subsonic $appversion..."
-mkdir -p ../subsonic
-sudo wget http://subsonic.org/download/subsonic-6.0.beta2.deb > /dev/null 2>&1
-cp *.deb ../subsonic/
+echo "Downloading libresonic $appversion..."
+mkdir -p ../libresonic
 echo "Extracting to $final_path..."
-sudo dpkg -i ../subsonic/*.deb
+sudo wget https://jenkins.zifnab.net/job/libresonic/lastSuccessfulBuild/artifact/.repository/org/libresonic/player/libresonic-main/$appversion/libresonic-main-$appversion.war -O /var/lib/tomcat8/webapps/libresonic.war
 
 # Configure tomcat server
 
-sudo mkdir /var/subsonic
-sudo mkdir /var/subsonic/transcode
-sudo ln -s /usr/bin/lame /var/subsonic/transcode
-sudo ln -s /usr/bin/ffmpeg /var/subsonic/transcode
+sudo mkdir /var/libresonic
+sudo mkdir /var/libresonic/transcode
+sudo ln -s /usr/bin/lame /var/libresonic/transcode
+sudo ln -s /usr/bin/ffmpeg /var/libresonic/transcode
 
 
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/subsonic.conf
-sudo echo 'SUBSONIC_ARGS="--context-path=/'$path' --max-memory=190"'>/etc/default/subsonic
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/libresonic.conf
+sudo echo 'SUBSONIC_ARGS="--context-path=/'$path' --max-memory=190"'>/etc/default/libresonic
 
-sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/subsonic/subsonic.properties"
-sudo sh -c "echo 'LdapManagerDn=' >> /var/subsonic/subsonic.properties"
-sudo sh -c "echo 'LdapEnabled=true' >> /var/subsonic/subsonic.properties"
-sudo sh -c "echo 'LdapUrl=ldap\://localhost\:389/ou\=users,dc\=yunohost,dc\=org' >> /var/subsonic/subsonic.properties"
-sudo sh -c "echo 'LdapSearchFilter=(&(objectClass\=mailAccount)(uid\={0}))' >> /var/subsonic/subsonic.properties"
-
-
+sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/libresonic/libresonic.properties"
+sudo sh -c "echo 'LdapManagerDn=' >> /var/libresonic/libresonic.properties"
+sudo sh -c "echo 'LdapEnabled=true' >> /var/libresonic/libresonic.properties"
+sudo sh -c "echo 'LdapUrl=ldap\://localhost\:389/ou\=users,dc\=yunohost,dc\=org' >> /var/libresonic/libresonic.properties"
+sudo sh -c "echo 'LdapSearchFilter=(&(objectClass\=mailAccount)(uid\={0}))' >> /var/libresonic/libresonic.properties"
 
 
-data_path=/home/yunohost.app/subsonic
+
+
+data_path=/home/yunohost.app/libresonic
 
 
 VERSION="1.10.2"
 
-wget "http://localhost:8080/subsonic/rest/createUser.view?u=admin&p=admin&adminRole=Yes&username=$user&password=a&email=$YNH_MAIL&ldapAuthenticated=Yes&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/createUser.view?u=admin&p=admin&adminRole=Yes&username=$user&password=a&email=$YNH_MAIL&ldapAuthenticated=Yes&v=$VERSION&c=myapp" > /dev/null 2>&1
 
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&settingsRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&streamRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&jukebowRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&downloadRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&uploadRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&covertArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&commentRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&podcastArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
-wget "http://localhost:8080/subsonic/rest/updateUser.view?u=admin&p=admin&shareArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&adminRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&settingsRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&streamRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&jukebowRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&downloadRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&uploadRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&covertArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&commentRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&podcastArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
+wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&shareArtRole=Yes&username=$user&v=$VERSION&c=myapp" > /dev/null 2>&1
 
 
 # Reload Nginx and regenerate SSOwat conf
 
 sudo service nginx reload
-sudo yunohost app setting subsonic skipped_uris -v "/rest"
+sudo yunohost app setting libresonic skipped_uris -v "/rest"
 sudo yunohost app ssowatconf

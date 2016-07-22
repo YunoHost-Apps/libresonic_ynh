@@ -1,15 +1,15 @@
 #!/bin/bash
 
 
-sudo yunohost service remove subsonic
-domain=$(sudo yunohost app setting subsonic domain)
+sudo yunohost service remove libresonic
+domain=$(sudo yunohost app setting libresonic domain)
 
-sudo rm /etc/nginx/conf.d/$domain.d/subsonic.conf
+sudo rm /etc/nginx/conf.d/$domain.d/libresonic.conf
 
-sudo service tomcat7 stop
-sudo rm /var/lib/tomcat7/webapps/subsonic.war
-sudo rm -r /var/subsonic/
-sudo service tomcat7 start
+sudo service tomcat8 stop
+sudo rm /var/lib/tomcat8/webapps/libresonic.war
+sudo rm -r /var/libresonic/
+sudo service tomcat8 start
 
 sudo service nginx reload
 sudo yunohost app ssowatconf 

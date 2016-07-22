@@ -1,14 +1,14 @@
 {
-    "name": "Subsonic",
-    "id": "subsonic",
+    "name": "Libresonic",
+    "id": "libresonic",
     "description": {
-        "en": "Subsonic is an open source, web-based media server.",
-        "fr": "Subsonic est un server multimedia open-source"
+        "en": "Libresonic is an open source, web-based media server.",
+        "fr": "Libresonic est un server multimedia open-source"
     },
     "developer": {
-        "name": "drfred1981",
+        "name": "massyas",
         "email": "",
-        "url": "http://subsonic.org"
+        "url": "http://libresonic.org"
     },
     "multi_instance": "true",
     "arguments": {
@@ -16,22 +16,22 @@
             {
                 "name": "domain",
                 "ask": {
-                    "en": "Choose a domain for Subsonic"
+                    "en": "Choose a domain for Libresonic"
                 },
                 "example": "domain.org"
             },
             {
                 "name": "path",
                 "ask": {
-                    "en": "Choose a path for Subsonic"
+                    "en": "Choose a path for Libresonic"
                 },
-                "example": "/subsonic",
-                "default": "/subsonic"
+                "example": "/libresonic",
+                "default": "/libresonic"
             },
             {
                 "name": "admin",
                 "ask": {
-                    "en": "Choose the Subsonic administrator (must be an existing YunoHost user)"
+                    "en": "Choose the Libresonic administrator (must be an existing YunoHost user)"
                 },
                 "example": "homer"
             }
