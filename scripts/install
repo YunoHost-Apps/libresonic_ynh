@@ -1,9 +1,30 @@
 #!/bin/bash
 
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# This is a multi-instance app, meaning it can be installed several times independently
+# The id of the app as stated in the manifest is available as $YNH_APP_ID
+# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
+# The app instance name is available as $YNH_APP_INSTANCE_NAME
+#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
+#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
+#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
+# The app instance name is probably what you are interested the most, since this is
+# guaranteed to be unique. This is a good unique identifier to define installation path,
+# db names, ...
+app=$YNH_APP_INSTANCE_NAME
+
 # Retrieve arguments
-domain=$1
-path=$2
-user=$3
+domain=$YNH_APP_ARG_DOMAIN
+path_url=$YNH_APP_ARG_PATH
+user=$YNH_APP_ARG_ADMIN
+
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
+# Save app settings
+ynh_app_setting_set "$app" user "$user"
 
 # Check user parameter
 sudo yunohost user list --json | grep -q "\"username\": \"$user\""
@@ -13,18 +34,15 @@ if [[ ! $? -eq 0 ]]; then
 fi
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a libresonic
-if [[ ! $? -eq 0 ]]; then
-    exit 1
-fi
-
+sudo yunohost app checkurl "${domain}${path_url}" -a "$app" \
+|| ynh_die "Path not available: ${domain}${path_url}"
 
 sudo yunohost app setting libresonic admin_user -v $user
 
 YNH_MAIL=$(sudo yunohost user info $user | grep "mail: " | sed s/'mail: '/''/g)
 
 # Remove trailing "/" for next commands
-path=${path%/}
+path=${path_url%/}
 
 # Install dependencies
 echo "Install dependencies ..."
