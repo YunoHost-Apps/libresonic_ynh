@@ -1,6 +1,7 @@
 {
     "name": "Libresonic",
     "id": "libresonic",
+    "packaging_format": 1,
     "description": {
         "en": "Libresonic is an open source, web-based media server.",
         "fr": "Libresonic est un server multimedia open-source"
@@ -10,20 +11,29 @@
         "email": "",
         "url": "http://libresonic.org"
     },
+    "requirements": {
+        "yunohost": ">> 2.4.0"
+    },
     "multi_instance": "true",
+    "services": [
+        "nginx",
+        "tomcat8"
+    ],
     "arguments": {
         "install" : [
             {
                 "name": "domain",
                 "ask": {
-                    "en": "Choose a domain for Libresonic"
+                    "en": "Choose a domain for Libresonic",
+                    "fr": "Choisissez un nom de domaine pour Libresonic"
                 },
                 "example": "domain.org"
             },
             {
                 "name": "path",
                 "ask": {
-                    "en": "Choose a path for Libresonic"
+                    "en": "Choose a path for Libresonic",
+                    "fr": "Choisissez un chemin pour Libresonic"
                 },
                 "example": "/libresonic",
                 "default": "/libresonic"
@@ -31,7 +41,8 @@
             {
                 "name": "admin",
                 "ask": {
-                    "en": "Choose the Libresonic administrator (must be an existing YunoHost user)"
+                    "en": "Choose the Libresonic administrator (must be an existing YunoHost user)",
+                    "fr": "Choisissez l’administrateur"
                 },
                 "example": "homer"
             }
