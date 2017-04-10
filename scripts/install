@@ -46,7 +46,7 @@ path=${path_url%/}
 
 # Install dependencies
 echo "Install dependencies ..."
-sudo apt-get install -y openjdk-8-jre tomcat8 lame flac faad vorbis-tools ffmpeg xsltproc
+sudo apt-get install -y tomcat8 lame flac faad vorbis-tools ffmpeg xsltproc
 
 # Copy files to the right place
 
