@@ -59,17 +59,17 @@ echo "Extracting to $final_path..."
 sudo wget https://libresonic.org/release/libresonic-v$appversion.war -O /var/lib/tomcat8/webapps/libresonic.war
 
 # Configure tomcat server
-
 sudo mkdir /var/libresonic
 sudo mkdir /var/libresonic/transcode
 sudo ln -s /usr/bin/lame /var/libresonic/transcode
 sudo ln -s /usr/bin/ffmpeg /var/libresonic/transcode
-sudo chown -R tomcat8:tomcat8 /var/libresonic/
 
+# Restart tomcat to deploy way
+sudo service tomcat8 restart
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/libresonic.conf
-sudo sh -c "echo 'SUBSONIC_ARGS=\"--context-path=/'$path' --max-memory=190\"'>/etc/default/libresonic"
+sudo sh -c "echo 'SUBSONIC_ARGS=\"--context-path='$path' --max-memory=190\"'>/etc/default/libresonic"
 
 sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/libresonic/libresonic.properties"
 sudo sh -c "echo 'LdapManagerDn=' >> /var/libresonic/libresonic.properties"
