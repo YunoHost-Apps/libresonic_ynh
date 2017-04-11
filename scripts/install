@@ -64,7 +64,7 @@ sudo mkdir /var/libresonic
 sudo mkdir /var/libresonic/transcode
 sudo ln -s /usr/bin/lame /var/libresonic/transcode
 sudo ln -s /usr/bin/ffmpeg /var/libresonic/transcode
-
+sudo chown -R tomcat8:tomcat8 /var/libresonic/
 
 
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
