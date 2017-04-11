@@ -56,7 +56,7 @@ echo "Downloading libresonic $appversion..."
 mkdir -p ../libresonic
 final_path="/var/lib/tomcat8/webapps/"
 echo "Extracting to $final_path..."
-sudo wget https://jenkins.zifnab.net/job/libresonic/lastSuccessfulBuild/artifact/.repository/org/libresonic/player/libresonic-main/$appversion/libresonic-main-$appversion.war -O /var/lib/tomcat8/webapps/libresonic.war
+sudo wget https://libresonic.org/release/libresonic-v$appversion.war -O /var/lib/tomcat8/webapps/libresonic.war
 
 # Configure tomcat server
 
