@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo yunohost service remove libresonic
+#sudo yunohost service remove libresonic
 domain=$(sudo yunohost app setting libresonic domain)
 # Comment for debuging install
 #sudo rm /etc/nginx/conf.d/$domain.d/libresonic.conf
