@@ -2,12 +2,12 @@
 
 #sudo yunohost service remove libresonic
 domain=$(sudo yunohost app setting libresonic domain)
-# Comment for debuging install
-#sudo rm /etc/nginx/conf.d/$domain.d/libresonic.conf
+
+sudo rm /etc/nginx/conf.d/$domain.d/libresonic.conf
 
 sudo service tomcat8 stop
-#sudo rm /var/lib/tomcat8/webapps/libresonic.war
-#sudo rm -r /var/libresonic/
+sudo rm /var/lib/tomcat8/webapps/libresonic.war
+sudo rm -r /var/libresonic/
 sudo service tomcat8 start
 
 sudo service nginx reload
