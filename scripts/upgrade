@@ -1,16 +1,11 @@
 #!/bin/bash
 
-
 sudo service tomcat8 stop
 
 appversion=$(cat upstream_version)
 echo "Downloading libresonic $appversion..."
-sudo wget -O ../libresonic.zip http://downloads.sourceforge.net/project/libresonic/libresonic/$appversion/libresonic-${appversion}-war.zip > /dev/null 2>&1
-echo "Extracting to $final_path..."
-mkdir -p ../libresonic
-sudo unzip ../libresonic.zip -d ../libresonic  > /dev/null 2>&1
-
-sudo cp ../libresonic/*.war /var/lib/tomcat8/webapps/libresonic.war
+final_path="/var/lib/tomcat8/webapps/"
+sudo wget https://libresonic.org/release/libresonic-v$appversion.war -O ${final_path}libresonic.war
 
 sudo chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/
 sudo service tomcat8 start
