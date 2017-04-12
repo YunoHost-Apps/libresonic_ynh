@@ -20,6 +20,13 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 user=$YNH_APP_ARG_ADMIN
 
+#=================================================
+# CHECK THE DEBIAN'S CODENAME
+#=================================================
+
+codename=$(lsb_release -a 2>/dev/null | grep Codename | cut -f 2)
+test -z "$codename" && (ynh_die "codename empty")
+
 # Source YunoHost helpers
 source /usr/share/yunohost/helpers
 
@@ -46,42 +53,49 @@ path=${path_url%/}
 
 # Install dependencies
 echo "Install dependencies ..."
+
+# libresonic needs tomcat8 + jdk-8. jdk-8 is only available in backports on jessie
+sudo sed -i "s@__CODENAME__@$codename@g" ../conf/backports.list
+sudo cp -a ../conf/backports.list /etc/apt/sources.list.d/
+sudo apt-get update
+sudo apt-get -t $codename-backports -y install openjdk-8-jre-headless ca-certificates-java
+# Install then main dependencies
 sudo apt-get install -y tomcat8 lame flac faad vorbis-tools xsltproc
 
-# Copy files to the right place
-
-
+# libresonic version in upstream_version file
 appversion=$(cat upstream_version)
 echo "Downloading libresonic $appversion..."
 mkdir -p ../libresonic
 final_path="/var/lib/tomcat8/webapps/"
 echo "Extracting to $final_path..."
-sudo wget https://libresonic.org/release/libresonic-v$appversion.war -O /var/lib/tomcat8/webapps/libresonic.war
+# Get libresonic war file
+sudo wget https://libresonic.org/release/libresonic-v$appversion.war -O $final_pathlibresonic.war
 
-# Configure tomcat server
+# Create needed directories and link binaries
 sudo mkdir /var/libresonic
 sudo mkdir /var/libresonic/transcode
 sudo ln -s /usr/bin/lame /var/libresonic/transcode
 sudo ln -s /usr/bin/ffmpeg /var/libresonic/transcode
 
-# Restart tomcat to deploy way
+sudo chown tomcat8:tomcat8 -R /var/libresonic
+
+# Restart tomcat to deploy war
 sudo service tomcat8 restart
 
+# Set nginx reverse proxy
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/libresonic.conf
-sudo sh -c "echo 'SUBSONIC_ARGS=\"--context-path='$path' --max-memory=190\"'>/etc/default/libresonic"
 
+# Configure libresonic to use relative path on tomcat
+sudo sh -c "echo 'SUBSONIC_ARGS=\"--context-path='$path' --max-memory=190\"'>/etc/default/libresonic"
+# Configure libresonic to use Ldap
 sudo sh -c "echo 'LdapAutoShadowing=true' >> /var/libresonic/libresonic.properties"
 sudo sh -c "echo 'LdapManagerDn=' >> /var/libresonic/libresonic.properties"
 sudo sh -c "echo 'LdapEnabled=true' >> /var/libresonic/libresonic.properties"
 sudo sh -c "echo 'LdapUrl=ldap\://localhost\:389/ou\=users,dc\=yunohost,dc\=org' >> /var/libresonic/libresonic.properties"
 sudo sh -c "echo 'LdapSearchFilter=(&(objectClass\=mailAccount)(uid\={0}))' >> /var/libresonic/libresonic.properties"
 
-
-
-
 data_path=/home/yunohost.app/libresonic
-
 
 VERSION="1.10.2"
 
@@ -100,7 +114,6 @@ wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&shar
 
 
 # Reload Nginx and regenerate SSOwat conf
-
 sudo service nginx reload
 sudo yunohost app setting libresonic skipped_uris -v "/rest"
 sudo yunohost app ssowatconf
