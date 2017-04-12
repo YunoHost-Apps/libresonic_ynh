@@ -69,7 +69,7 @@ mkdir -p ../libresonic
 final_path="/var/lib/tomcat8/webapps/"
 echo "Extracting to $final_path..."
 # Get libresonic war file
-sudo wget https://libresonic.org/release/libresonic-v$appversion.war -O $final_pathlibresonic.war
+sudo wget https://libresonic.org/release/libresonic-v$appversion.war -O ${final_path}libresonic.war
 
 # Create needed directories and link binaries
 sudo mkdir /var/libresonic
