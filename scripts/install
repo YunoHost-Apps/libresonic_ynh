@@ -36,8 +36,7 @@ ynh_app_setting_set "$app" user "$user"
 # Check user parameter
 sudo yunohost user list --json | grep -q "\"username\": \"$user\""
 if [[ ! $? -eq 0 ]]; then
-    echo "Wrong user"
-    exit 1
+    ynh_die "Wrong user"
 fi
 
 # Check domain/path availability
