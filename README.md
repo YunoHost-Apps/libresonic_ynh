@@ -2,5 +2,7 @@ libresonic_ynh
 ============
 Package Libresonic for Yunohost
 
-Data path for libresonic is /home/yunohost.app/libresonic
-Please make sure that your $JAVA_HOME is defined else application can't run
+Install & remove is OK.
+Dependency openjdk-8 is installed from debian backports.
+
+Backup seems OK but restore is KO.
