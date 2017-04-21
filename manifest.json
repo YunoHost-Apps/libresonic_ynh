@@ -6,11 +6,12 @@
         "en": "Libresonic is an open source, web-based media server.",
         "fr": "Libresonic est un server multimedia open-source"
     },
+    "license": "GNU General Public License v3.0",
+    "url": "http://libresonic.org",
     "maintainer": {
         "name": "Eugene E. Kashpureff Jr",
         "email": "eugene@kashpureff.org",
-        "url": "http://libresonic.org",
-        "license": "GNU General Public License v3.0"
+        "url": "https://eugenekay.com"
     },
     "requirements": {
         "yunohost": ">> 2.4.0"
