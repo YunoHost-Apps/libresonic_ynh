@@ -4,6 +4,7 @@
 domain=$(sudo yunohost app setting libresonic domain)
 
 sudo rm /etc/nginx/conf.d/$domain.d/libresonic.conf
+sudo rm /etc/default/libresonic
 
 sudo service tomcat8 stop
 sudo rm /var/lib/tomcat8/webapps/libresonic.war
