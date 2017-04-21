@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit on command errors and treat unset variables as an error
+set -u
+
 #sudo yunohost service remove libresonic
 domain=$(sudo yunohost app setting libresonic domain)
 
