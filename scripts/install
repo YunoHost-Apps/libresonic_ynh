@@ -44,7 +44,7 @@ fi
 sudo yunohost app checkurl "${domain}${path_url}" -a "$app" \
 || ynh_die "Path not available: ${domain}${path_url}"
 
-sudo yunohost app setting libresonic admin_user -v $user
+ynh_app_setting_set "$app" admin_user "$user"
 
 YNH_MAIL=$(sudo yunohost user info $user | grep "mail: " | sed s/'mail: '/''/g)
 
@@ -115,5 +115,5 @@ wget "http://localhost:8080/libresonic/rest/updateUser.view?u=admin&p=admin&shar
 
 # Reload Nginx and regenerate SSOwat conf
 sudo service nginx reload
-sudo yunohost app setting libresonic skipped_uris -v "/rest"
+ynh_app_setting_set "$app" skipped_uris "/rest"
 sudo yunohost app ssowatconf
