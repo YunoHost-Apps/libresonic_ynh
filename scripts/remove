@@ -3,8 +3,8 @@
 # Exit on command errors and treat unset variables as an error
 set -u
 
-#sudo yunohost service remove libresonic
-domain=$(sudo yunohost app setting libresonic domain)
+# Retrieve app settings
+domain=$(ynh_app_setting_get "$app" domain)
 
 sudo rm /etc/nginx/conf.d/$domain.d/libresonic.conf
 sudo rm /etc/default/libresonic
