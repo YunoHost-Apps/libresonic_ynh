@@ -21,12 +21,14 @@ sudo yunohost app checkurl "${domain}${path_url}" -a "$app" \
     || ynh_die "Path not available: ${domain}${path_url}"
 
 # Restore sources & data
-src_path="/var/www/${app}"
+src_path="/var/${app}"
 sudo cp -a ./sources "$src_path"
+sudo cp -a ./war /var/lib/tomcat8/webapps/
+sudo cp -a ./etc /etc/default/
 
 # Restore permissions to app files
 # you may need to make some file and/or directory writeable by www-data (nginx user)
-sudo chown -R root: "$src_path"
+sudo chown tomcat8:tomcat8 -R "$src_path"
 
 # Restore NGINX configuration
 sudo cp -a ./nginx.conf "/etc/nginx/conf.d/${domain}.d/${app}.conf"
