@@ -33,7 +33,7 @@ source /usr/share/yunohost/helpers
 # Save app settings
 ynh_app_setting_set "$app" user "$user"
 ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app path $path
+ynh_app_setting_set $app path $path_url
 
 # Check user parameter
 sudo yunohost user list --json | grep -q "\"username\": \"$user\""
