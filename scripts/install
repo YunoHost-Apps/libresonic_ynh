@@ -34,6 +34,7 @@ source /usr/share/yunohost/helpers
 ynh_app_setting_set "$app" user "$user"
 ynh_app_setting_set $app domain $domain
 ynh_app_setting_set $app path $path
+ynh_app_setting_set $app final_path $final_path
 
 # Check user parameter
 sudo yunohost user list --json | grep -q "\"username\": \"$user\""
@@ -85,7 +86,8 @@ sudo service tomcat8 restart
 
 # Set nginx reverse proxy
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/libresonic.conf
+sed -i "s@__FINALPATH__@$final_path@g" ../conf/nginx.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 
 # Configure libresonic to use relative path on tomcat
 sudo sh -c "echo 'SUBSONIC_ARGS=\"--context-path='$path' --max-memory=190\"'>/etc/default/libresonic"
