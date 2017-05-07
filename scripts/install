@@ -30,13 +30,9 @@ test -z "$codename" && (ynh_die "codename empty")
 # Source YunoHost helpers
 source /usr/share/yunohost/helpers
 
-# Set default final_path
-final_path=/var/www/$app
-
 # Save app settings
 ynh_app_setting_set "$app" user "$user"
 ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app final_path $final_path
 ynh_app_setting_set $app path $path_url
 
 # Check user parameter
@@ -88,9 +84,13 @@ sudo chown tomcat8:tomcat8 -R /var/libresonic
 sudo service tomcat8 restart
 
 # Set nginx reverse proxy
-sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sed -i "s@__FINALPATH__@$final_path@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+if [[ "$path" == "/" ]] ; then
+  nginx_conf=../conf/nginx.conf
+else
+  nginx_conf=../conf/nginx_sub_dir.conf
+fi
+sed -i "s@PATHTOCHANGE@$path@g" $nginx_conf
+sudo cp $nginx_conf /etc/nginx/conf.d/$domain.d/$app.conf
 
 # Configure libresonic to use relative path on tomcat
 sudo sh -c "echo 'SUBSONIC_ARGS=\"--context-path='$path' --max-memory=190\"'>/etc/default/libresonic"
