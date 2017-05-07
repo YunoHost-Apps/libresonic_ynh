@@ -30,6 +30,9 @@ test -z "$codename" && (ynh_die "codename empty")
 # Source YunoHost helpers
 source /usr/share/yunohost/helpers
 
+# Set default final_path
+final_path=/var/www/$app
+
 # Save app settings
 ynh_app_setting_set "$app" user "$user"
 ynh_app_setting_set $app domain $domain
