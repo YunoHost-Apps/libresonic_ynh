@@ -84,11 +84,11 @@ sudo chown tomcat8:tomcat8 -R /var/libresonic
 sudo service tomcat8 restart
 
 # Set nginx reverse proxy
-if [[ "$path" == "/" ]] ; then
+#if [[ "$path" == "/" ]] ; then
   nginx_conf=../conf/nginx.conf
-else
-  nginx_conf=../conf/nginx_sub_dir.conf
-fi
+#else
+#  nginx_conf=../conf/nginx_sub_dir.conf
+#fi
 sed -i "s@PATHTOCHANGE@$path@g" $nginx_conf
 sudo cp $nginx_conf /etc/nginx/conf.d/$domain.d/$app.conf
 
