@@ -6,7 +6,7 @@
         "en": "Libresonic is an open source, web-based media server.",
         "fr": "Libresonic est un server multimedia open-source"
     },
-    "license": "GNU General Public License v3.0",
+    "license": "GPLv3.0",
     "url": "http://libresonic.org",
     "developper": {
         "name": "Eugene E. Kashpureff Jr",
