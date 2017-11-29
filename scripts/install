@@ -21,7 +21,7 @@ path_url=$YNH_APP_ARG_PATH
 user=$YNH_APP_ARG_ADMIN
 
 #=================================================
-# CHECK THE DEBIAN'S CODENAME
+# CHECK DEBIAN CODENAME
 #=================================================
 
 codename=$(lsb_release -a 2>/dev/null | grep Codename | cut -f 2)
