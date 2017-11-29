@@ -61,7 +61,7 @@ sudo cp -a ../conf/backports.list /etc/apt/sources.list.d/
 sudo apt-get update
 sudo apt-get -t $codename-backports -y install openjdk-8-jre-headless ca-certificates-java
 # Install then main dependencies
-sudo apt-get install -y tomcat8 lame flac faad vorbis-tools xsltproc
+sudo apt-get install -y tomcat8 lame flac faad vorbis-tools xsltproc ffmpeg
 
 # libresonic version in upstream_version file
 appversion=$(cat upstream_version)
