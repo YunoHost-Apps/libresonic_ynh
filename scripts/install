@@ -101,6 +101,8 @@ sudo sh -c "echo 'LdapEnabled=true' >> /var/libresonic/libresonic.properties"
 sudo sh -c "echo 'LdapUrl=ldap\://localhost\:389/ou\=users,dc\=yunohost,dc\=org' >> /var/libresonic/libresonic.properties"
 sudo sh -c "echo 'LdapSearchFilter=(&(objectClass\=mailAccount)(uid\={0}))' >> /var/libresonic/libresonic.properties"
 
+sudo chown tomcat8:tomcat8 /var/libresonic/libresonic.properties
+
 data_path=/home/yunohost.app/libresonic
 
 VERSION="1.10.2"
