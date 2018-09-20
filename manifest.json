@@ -8,11 +8,6 @@
     },
     "license": "GPLv3.0",
     "url": "http://libresonic.org",
-    "developper": {
-        "name": "Eugene E. Kashpureff Jr",
-        "email": "eugene@kashpureff.org",
-        "url": "https://eugenekay.com"
-    },
     "maintainer": {
         "name": "massyas",
         "email": "massyas@gmail.com"
